@@ -1,25 +1,13 @@
-import readline from "node:readline";
-import fs from "node:fs";
-import events from "node:events";
+import { readFileLineByLine } from "../read-file-line-by-line";
 
 async function getSumOfNumbersFromFileLineByLine() {
-  try {
-    let totalSum = 0;
-    const rl = readline.createInterface({
-      input: fs.createReadStream("./input.txt"),
-      crlfDelay: Infinity,
-    });
-
-    rl.on("line", (line) => {
-      let sumOfCurrentLine = getFirstAndLastNumber(line);
-      totalSum += sumOfCurrentLine;
-    });
-
-    await events.once(rl, "close");
-    console.log("answer", totalSum);
-  } catch (error) {
-    consolr.error(error);
-  }
+  let totalSum = 0;
+  let filePath = new URL("./input.txt", import.meta.url);
+  await readFileLineByLine(filePath, (line) => {
+    let sumOfCurrentLine = getFirstAndLastNumber(line);
+    totalSum += sumOfCurrentLine;
+  });
+  console.log("answer", totalSum);
 }
 
 let numMap = {
